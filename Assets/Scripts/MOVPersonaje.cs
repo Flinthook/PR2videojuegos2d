@@ -11,17 +11,30 @@ public class MOVPersonaje : MonoBehaviour
 
     public bool puedoSaltar = true;
     private Rigidbody2D rb;
+
+    private Animator animatorController;
+
+    GameObject respawn;
+
     void Start()
     {
 
         rb = GetComponent<Rigidbody2D>();
 
+        animatorController = this.GetComponent<Animator>();
+
+        respawn = GameObject.Find("Respawn");
+
+        transform.position = respawn.transform.position;
 
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if(GameManager.estoyMuerto) return;
+
 
         float movTeclas = Input.GetAxis("Horizontal"); //(-1f -  1f)
         /*        
@@ -43,12 +56,22 @@ public class MOVPersonaje : MonoBehaviour
         rb.velocity = new Vector2(movTeclas * multiplicador, rb.velocity.y);
 
 
-        if (movTeclas < 0 ){
+        if (movTeclas < 0)
+        {
             this.GetComponent<SpriteRenderer>().flipX = true;
-        }else if (movTeclas > 0){
+        }
+        else if (movTeclas > 0)
+        {
             this.GetComponent<SpriteRenderer>().flipX = false;
         }
 
+        //ANIMACION MOVIMIENTO
+
+        if (movTeclas != 0)
+        {
+            animatorController.SetBool("activaCamina", true);
+        }
+        else { animatorController.SetBool("activaCamina", false); }
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.55f);
         Debug.DrawRay(transform.position, Vector2.down, Color.magenta);
@@ -56,7 +79,7 @@ public class MOVPersonaje : MonoBehaviour
         if (hit)
         {
             puedoSaltar = true;
-            Debug.Log(hit.collider.name);
+            //Debug.Log(hit.collider.name);
         }
         else
         {
@@ -73,14 +96,31 @@ public class MOVPersonaje : MonoBehaviour
 
         }
 
+        if (transform.position.y <= -7)
+        {
+            Respawnear();
+        }
+    /// CERO VIDAS!
+    
+    if(GameManager.vidas <= 0){
+      GameManager.estoyMuerto = true;
+
+    }
+
+
 
 
     }
 
-    /*    void OnCollisionEnter2D()
-        {
-            puedoSaltar = true;
-        } */
+    public void Respawnear()
+    {
+        Debug.Log("vidas: "+GameManager.vidas);
+        GameManager.vidas = GameManager.vidas - 1;
+        Debug.Log("vidas: "+GameManager.vidas);
+
+
+        transform.position = respawn.transform.position;
+    }
 
 
 }
