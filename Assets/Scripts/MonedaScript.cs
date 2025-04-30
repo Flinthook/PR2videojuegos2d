@@ -25,6 +25,7 @@ public class MonedaScript : MonoBehaviour
             miAnimadorController.SetBool("monedaDestruir", true);
 
             Destroy(this.gameObject, 1.25f);
+        AudioManager.Instance.SonarClip(AudioManager.Instance.fxCoin);
         }
 
 

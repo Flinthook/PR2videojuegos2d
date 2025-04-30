@@ -11,10 +11,13 @@ public class MOVPersonaje : MonoBehaviour
 
     public bool puedoSaltar = true;
 
+
     public static bool miraDerecha = true;
     private Rigidbody2D rb;
 
     private Animator animatorController;
+
+    bool soyAzul;
 
     GameObject respawn;
 
@@ -128,10 +131,21 @@ public class MOVPersonaje : MonoBehaviour
         Debug.Log("vidas: "+GameManager.vidas);
         GameManager.vidas = GameManager.vidas - 1;
         Debug.Log("vidas: "+GameManager.vidas);
+        
 
 
         transform.position = respawn.transform.position;
     }
+
+
+        public void CambiarColor (){
+            if (soyAzul){
+            this.GetComponent<SpriteRenderer>().color = Color.white; soyAzul = false;}else{
+                 this.GetComponent<SpriteRenderer>().color = Color.blue; soyAzul = true;
+            };
+
+        }
+        
 
 
 }

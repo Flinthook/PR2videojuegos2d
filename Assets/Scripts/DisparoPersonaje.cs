@@ -4,26 +4,39 @@ using UnityEngine;
 
 public class DisparoPersonaje : MonoBehaviour
 {
-    // Start is called before the first frame
-    //  update
-    public GameObject fuego;
+    public GameObject fuego; // Regular fireball
+    public GameObject fuegoGrande; // Bigger fireball
+    public float holdTimeThreshold = 1.0f; // Time required to charge the bigger fireball
 
-    void Start()
-    {
-        
-    }
+    private float buttonHoldTime = 0f; // Tracks how long the button is held
 
-    // Update is called once per frame
     void Update()
     {
-        
-        if (Input.GetKeyDown(KeyCode.E)){
-
-            Instantiate(fuego, transform.position, Quaternion.identity);
-            
+        // Check if the fire button is being held
+        if (Input.GetKey(KeyCode.E))
+        {
+            buttonHoldTime += Time.deltaTime; // Increment hold time
         }
 
+        // Check if the fire button is released
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            if (buttonHoldTime >= holdTimeThreshold)
+            {
+                // Shoot a bigger fireball
+                Instantiate(fuegoGrande, transform.position, Quaternion.identity);
+            }
+            else
+            {
+                // Shoot a regular fireball
+                Instantiate(fuego, transform.position, Quaternion.identity);
+            }
 
+            // Play the fire sound
+            AudioManager.Instance.SonarClip(AudioManager.Instance.fxFire);
 
+            // Reset the hold time
+            buttonHoldTime = 0f;
+        }
     }
 }
