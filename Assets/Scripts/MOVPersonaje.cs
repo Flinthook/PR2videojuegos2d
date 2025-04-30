@@ -10,6 +10,8 @@ public class MOVPersonaje : MonoBehaviour
     public float multiplicadorSalto = 5f;   // Start is called before the first frame update
 
     public bool puedoSaltar = true;
+
+    public static bool miraDerecha = true;
     private Rigidbody2D rb;
 
     private Animator animatorController;
@@ -59,10 +61,12 @@ public class MOVPersonaje : MonoBehaviour
         if (movTeclas < 0)
         {
             this.GetComponent<SpriteRenderer>().flipX = true;
+            miraDerecha = false;
         }
         else if (movTeclas > 0)
         {
             this.GetComponent<SpriteRenderer>().flipX = false;
+            miraDerecha = true;
         }
 
         //ANIMACION MOVIMIENTO
@@ -89,6 +93,13 @@ public class MOVPersonaje : MonoBehaviour
 
 
         if (Input.GetKeyDown(KeyCode.Space) && puedoSaltar)
+
+          //FIXED SALTO
+          
+                  
+
+
+
         {
             rb.AddForce(new Vector2(0, multiplicadorSalto),
             ForceMode2D.Impulse);
